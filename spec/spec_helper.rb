@@ -1,4 +1,4 @@
-require_relative '../config/environment'
+require_relative "../config/environment"
 DB[:conn] = SQLite3::Database.new ":memory:"
 
 RSpec.configure do |config|
@@ -16,6 +16,6 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
-      DB[:conn].execute("DROP TABLE IF EXISTS dogs")
+    DB[:conn].execute("DROP TABLE IF EXISTS dogs")
   end
 end

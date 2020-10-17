@@ -38,27 +38,11 @@ SQL
     end
     new_special_dog_instance.first
   end
-  def self.find_or_create_by(name:, breed:)
-    sql = <<-SQL
-    SELECT * FROM dogs
-    WHERE name = ? and breed = ?
-    LIMIT 1
-    SQL
-    results = DB[:conn].execute(sql, name, breed)
-    if results.length > 0
-      return self.new_from_db(results[0])
+  def self.find_or_create_by
+    if Dog
+      Dog.create
+    else
     end
-    self.create(name: name, breed: breed)
-  end
-  def self.find_by_name(name)
-    sql = <<-SQL
-        SELECT *
-        FROM dogs
-        WHERE name = ?
-      SQL
-    DB[:conn].execute(sql, name).map do |row|
-      self.new_from_db(row)
-    end.first
   end
 
   def initialize(id: nil, name:, breed:)
@@ -75,14 +59,5 @@ SQL
     DB[:conn].execute(sql, @name, @breed)
     @id = DB[:conn].execute("SELECT last_insert_rowid() FROM dogs")[0][0]
     return self
-  end
-
-  def update
-    sql = <<-SQL
-    UPDATE dogs
-    SET name = ?, breed = ?
-    WHERE id = ?
-    SQL
-    DB[:conn].execute(sql, @name, @breed, @id)
   end
 end
